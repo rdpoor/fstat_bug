@@ -1,17 +1,9 @@
-# Demonstration of `SYS_FS_FileStat()` / `FAFTS_stat()` bug
-
-## Issue
-
-```
-
-// Bug in sys_fs_fat_interface.c:FATFS_stat():290 if stat_buf has a stray
-// value in stat_buf->lfname, `fileStat->lfname[0] = `\0` hard faults.
-```
+# Demonstration of `SYS_FS_FileStat()` / `FATFS_stat()` bug
 
 ## Summary
 
 Passing an uninitialized `SYS_FS_FSTAT` structure to `SYS_FS_FileStat()` will
-lead to a hard fault.
+lead to a hard fault or unpredictable results.
 
 ## Details
 
