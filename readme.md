@@ -1,9 +1,13 @@
-# Demonstration of `SYS_FS_FileStat()` / `FATFS_stat()` bug
+# Demo of `SYS_FS_FileStat()` / `FATFS_stat()` bug
 
 ## Summary
 
 Passing an uninitialized `SYS_FS_FSTAT` structure to `SYS_FS_FileStat()` will
 lead to a hard fault or unpredictable results.
+
+In the best case, the system will get a hard fault.  But a much worse problem
+ensues if it does NOT get a hard fault, since an arbitrary byte of memory will
+be set to '\0'.
 
 ## Details
 
@@ -36,10 +40,6 @@ The problem is that if fileStat->lfname contains a non-zero stray values, as
 would be the case if fileStat is allocated on the stack, then the code will
 attempt to de-reference the pointer and write to it.  
 
-In the best case, the system will get a hard fault.  But a much worse problem
-ensues if it does NOT get a hard fault, since an arbitrary byte of memory will
-be set to '\0'.
-
 ## Demonstrating the bug
 
 ### Preprequisites:
@@ -58,7 +58,7 @@ be set to '\0'.
 
 ### Observe
 
-The program will stope in the debugger with a hard fault before completing.
+The program will stop in the debugger with a hard fault.
 
 ### Workaround
 
